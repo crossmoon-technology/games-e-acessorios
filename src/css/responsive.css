@@ -1,0 +1,371 @@
+/*
+ * Ajustes por tamanho de tela. Pontos de corte em settings/grid.css.
+ * `max-width: 1023px` vale abaixo de 1024px, e assim por diante.
+ */
+
+/* Menu mobile: escondido no desktop */
+.burger,
+.mobile-panel {
+  display: none;
+}
+
+/* ----- Abaixo de 1024px: tablet e celular ----- */
+@media (max-width: 1023px) {
+  :root {
+    --header-height: 77px;
+  }
+
+  /* Header */
+  .subbar {
+    display: none;
+  }
+
+  .topbar-inner {
+    gap: 12px;
+    height: 76px;
+  }
+
+  .logo img {
+    height: 60px;
+  }
+
+  .actions {
+    gap: 4px;
+    margin-left: auto;
+  }
+
+  .search + .actions {
+    margin-left: 0;
+  }
+
+  .action {
+    padding: 8px;
+  }
+
+  .action-text {
+    display: none;
+  }
+
+  .burger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    font-size: 26px;
+    color: var(--white);
+    cursor: pointer;
+    background: none;
+    border: 0;
+    border-radius: 10px;
+  }
+
+  .burger:hover {
+    background: var(--overlay-white-08);
+  }
+
+  .header.is-menu-open .mobile-panel {
+    display: block;
+  }
+
+  .mobile-panel {
+    padding: 12px 0 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  .mobile-search {
+    display: none;
+    margin-bottom: 8px;
+  }
+
+  .mobile-search input {
+    width: 100%;
+    height: 44px;
+    padding: 0 14px;
+    font-size: 14px;
+    color: var(--white);
+    background: var(--surface-raised);
+    border: 1px solid var(--border-strong);
+    border-radius: 10px;
+    outline: 0;
+  }
+
+  .mobile-search input:focus {
+    box-shadow: 0 0 0 3px var(--orange-focus);
+  }
+
+  .mobile-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .mobile-nav a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 10px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 8px;
+  }
+
+  .mobile-nav a:hover {
+    background: var(--overlay-white-08);
+  }
+
+  .mobile-nav .bx {
+    font-size: 22px;
+  }
+
+  /* Banner */
+  .banner {
+    min-height: 320px;
+    padding: 32px 72px;
+  }
+
+  .banner-arrow--prev {
+    left: 12px;
+  }
+
+  .banner-arrow--next {
+    right: 12px;
+  }
+
+  /* Vantagens: 2 por linha */
+  .benefits {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 20px;
+  }
+
+  .benefit:nth-child(odd) {
+    border-left: 0;
+  }
+
+  /* Categorias */
+  .categories {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  /* Produtos e jogos: 3 por linha */
+  .products {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* Lançamentos viram faixa rolável */
+  .carousel-arrow {
+    display: none;
+  }
+
+  .games {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(180px, 30%);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .games::-webkit-scrollbar {
+    display: none;
+  }
+
+  .game {
+    scroll-snap-align: start;
+  }
+
+  /* Promoções empilhadas */
+  .promos {
+    grid-template-columns: 1fr;
+  }
+
+  /* Newsletter */
+  .newsletter {
+    flex-wrap: wrap;
+  }
+
+  .newsletter-art {
+    display: none;
+  }
+
+  .newsletter-form {
+    max-width: none;
+    margin-left: 0;
+  }
+
+  /* Marcas */
+  .brands {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  /* Garantias: 2 por linha */
+  .guarantees {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 20px;
+  }
+
+  .guarantee:nth-child(odd) {
+    border-left: 0;
+  }
+
+  /* Footer */
+  .footer-top {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ----- Abaixo de 875px: a busca sai da barra e vai para o menu ----- */
+@media (max-width: 874px) {
+  .search {
+    display: none;
+  }
+
+  .search + .actions {
+    margin-left: auto;
+  }
+
+  .mobile-search {
+    display: block;
+  }
+
+  .banner-slide h2 {
+    font-size: 34px;
+  }
+}
+
+/* ----- Abaixo de 735px ----- */
+@media (max-width: 734px) {
+  .action--extra {
+    display: none;
+  }
+
+  .products {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .games {
+    grid-auto-columns: minmax(170px, 44%);
+  }
+
+  .brands {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .footer-top {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .newsletter {
+    padding: 20px;
+  }
+}
+
+/* ----- Abaixo de 650px ----- */
+@media (max-width: 649px) {
+  .banner {
+    min-height: 300px;
+    padding: 28px 24px 44px;
+  }
+
+  .banner-arrow {
+    display: none;
+  }
+
+  .banner-slide h2 {
+    font-size: 28px;
+  }
+
+  .banner-slide p {
+    font-size: 14px;
+  }
+
+  .categories {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .section-title {
+    font-size: 18px;
+  }
+}
+
+/* ----- Abaixo de 465px ----- */
+@media (max-width: 464px) {
+  :root {
+    --header-height: 69px;
+  }
+
+  .topbar-inner {
+    height: 68px;
+  }
+
+  .logo img {
+    height: 52px;
+  }
+
+  .banner-slide h2 {
+    font-size: 24px;
+  }
+
+  .banner-slide p br {
+    display: none;
+  }
+
+  .benefits {
+    grid-template-columns: 1fr;
+  }
+
+  .benefit {
+    justify-content: flex-start;
+    border-left: 0 !important;
+  }
+
+  .categories {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .products,
+  .brands {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .product {
+    padding: 12px;
+  }
+
+  .promo {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .promo-art {
+    display: none;
+  }
+
+  .newsletter {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .newsletter-form {
+    width: 100%;
+  }
+
+  .guarantees {
+    grid-template-columns: 1fr;
+  }
+
+  .guarantee {
+    justify-content: flex-start;
+    border-left: 0 !important;
+  }
+
+  .footer-top {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,38 @@
+/*
+ * Grid do projeto, no mesmo esquema do duel-nexus (settings/grid.scss + container.scss).
+ *
+ * CSS puro não aceita variável dentro de @media, então os pontos de corte ficam aqui
+ * documentados e são escritos como números nas media queries:
+ *
+ *   xx-small   320px  (largura mínima)
+ *   x-small    465px
+ *   extra-small 550px
+ *   small      650px
+ *   medium-small 735px
+ *   medium     875px
+ *   big       1024px  (desktop: aparece a barra de categorias)
+ *   extra-big 1440px  (largura máxima do conteúdo)
+ *
+ * O style.css é o layout de desktop; o responsive.css usa `max-width` (ponto de corte menos 1px)
+ * para adaptar de baixo de cada ponto.
+ */
+
+.container {
+  width: 100%;
+  min-width: 320px;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+@media (min-width: 550px) {
+  .container {
+    padding: 0 24px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding: 0 40px;
+  }
+}
