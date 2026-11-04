@@ -230,7 +230,7 @@ const renderCartPage = () => {
       <div class="cart-empty">
         <i class="bx bx-cart" aria-hidden="true"></i>
         <p>Seu carrinho está vazio.</p>
-        <a class="cart-back" href="/src/index.html"><i class="bx bx-arrow-back" aria-hidden="true"></i> Continuar comprando</a>
+        <a class="cart-back" href="index.html"><i class="bx bx-arrow-back" aria-hidden="true"></i> Continuar comprando</a>
       </div>`;
     return;
   }
@@ -271,7 +271,7 @@ const renderCartPage = () => {
         </ul>
 
         <div class="cart-actions">
-          <a class="cart-back" href="/src/index.html"><i class="bx bx-arrow-back" aria-hidden="true"></i> Continuar comprando</a>
+          <a class="cart-back" href="index.html"><i class="bx bx-arrow-back" aria-hidden="true"></i> Continuar comprando</a>
           <button type="button" class="cart-clear" data-action="clear"><i class="bx bx-trash" aria-hidden="true"></i> Limpar carrinho</button>
         </div>
       </div>
@@ -435,7 +435,7 @@ const SORT_OPTIONS = [
   ["nome", "Nome (A-Z)"],
 ];
 
-const productUrl = (id) => `/src/produto.html?id=${id}`;
+const productUrl = (id) => `produto.html?id=${id}`;
 
 const listUrl = (params) => {
   const query = new URLSearchParams();
@@ -447,7 +447,7 @@ const listUrl = (params) => {
   });
 
   const text = query.toString();
-  return `/src/produtos.html${text ? `?${text}` : ""}`;
+  return `produtos.html${text ? `?${text}` : ""}`;
 };
 
 const escapeHtml = (text) =>
@@ -541,7 +541,7 @@ const renderProductList = () => {
         : `<div class="cart-empty">
             <i class="bx bx-search" aria-hidden="true"></i>
             <p>Nenhum produto encontrado.</p>
-            <a class="cart-back" href="/src/produtos.html">Ver todos os produtos</a>
+            <a class="cart-back" href="produtos.html">Ver todos os produtos</a>
           </div>`
     }`;
 };
@@ -560,7 +560,7 @@ const renderProductPage = () => {
       <div class="cart-empty">
         <i class="bx bx-error-circle" aria-hidden="true"></i>
         <p>Produto não encontrado.</p>
-        <a class="cart-back" href="/src/produtos.html">Ver todos os produtos</a>
+        <a class="cart-back" href="produtos.html">Ver todos os produtos</a>
       </div>`;
     return;
   }
@@ -573,7 +573,7 @@ const renderProductPage = () => {
   root.dataset.id = product.id;
   root.innerHTML = `
     <nav class="breadcrumb" aria-label="Você está em">
-      <a href="/src/index.html">Início</a>
+      <a href="index.html">Início</a>
       <i class="bx bx-chevron-right" aria-hidden="true"></i>
       <a href="${listUrl({ categoria: product.category })}">${CATEGORY_LABELS[product.category]}</a>
       <i class="bx bx-chevron-right" aria-hidden="true"></i>
@@ -653,7 +653,7 @@ document.addEventListener("click", (event) => {
   addItem(catalog.find((item) => item.id === root.dataset.id), qty);
 
   if (action === "buy") {
-    location.href = "/src/carrinho.html";
+    location.href = "carrinho.html";
     return;
   }
 
