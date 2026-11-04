@@ -13,70 +13,76 @@
   </head>
   <body class="login-page">
     <main class="login-card">
-      <a class="login-logo" href="index.html" aria-label="Games e Acessórios">
-        <img src="/public/images/logo-dark.png" alt="Games e Acessórios" />
-      </a>
-
-      <h1>Acesse sua conta</h1>
-      <p class="login-subtitle">
-        Entre na sua conta e continue comprando <br />seus games e acessórios
-        favoritos.
-      </p>
-
-      <form class="login-form" method="post" novalidate>
-        <label class="field">
-          <span class="sr-only">E-mail</span>
-          <i class="bx bx-envelope" aria-hidden="true"></i>
-          <input
-            type="email"
-            name="email"
-            placeholder="E-mail"
-            autocomplete="email"
-            required
-          />
-        </label>
-
-        <label class="field">
-          <span class="sr-only">Senha</span>
-          <i class="bx bx-lock-alt" aria-hidden="true"></i>
-          <input
-            type="password"
-            name="password"
-            placeholder="Senha"
-            autocomplete="current-password"
-            required
-          />
-          <button
-            type="button"
-            class="field-toggle"
-            aria-label="Mostrar senha"
-            data-toggle-password
-          >
-            <i class="bx bx-show" aria-hidden="true"></i>
-          </button>
-        </label>
-
-        <a class="forgot-link" href="#">Esqueceu sua senha?</a>
-
-        <button class="login-submit" type="submit">Entrar</button>
-      </form>
-
-      <div class="login-divider"><span>ou entre com</span></div>
-
-      <div class="login-social">
-        <a class="social-button" href="#">
-          <i class="bx bxl-google" aria-hidden="true"></i>
-          Continuar com Google
+      <section class="login-brand">
+        <a class="login-logo" href="/src/index.html" aria-label="Games e Acessórios">
+          <img src="/public/images/logo.png" alt="Games e Acessórios" />
         </a>
-        <a class="social-button" href="#">
-          <i class="bx bxl-discord-alt" aria-hidden="true"></i>
-          Continuar com Discord
-        </a>
-      </div>
 
-      <p class="login-signup">
-        Ainda não tem uma conta? <a href="#">Criar sua conta</a>
-      </p>
+        <h2>Sua loja de games <br />e acessórios</h2>
+        <p>
+          Entre na sua conta e aproveite <br />ofertas, novidades e muito mais!
+        </p>
+      </section>
+
+      <section class="login-panel">
+        <h1>Acesse sua conta</h1>
+        <p class="login-subtitle">Entre com seus dados para continuar</p>
+
+        <form class="login-form" method="post" novalidate>
+          <label class="field">
+            <span class="sr-only">E-mail</span>
+            <i class="bx bx-envelope" aria-hidden="true"></i>
+            <input
+              type="email"
+              name="email"
+              placeholder="E-mail"
+              autocomplete="email"
+              required
+            />
+          </label>
+
+          <label class="field">
+            <span class="sr-only">Senha</span>
+            <i class="bx bx-lock-alt" aria-hidden="true"></i>
+            <input
+              type="password"
+              name="password"
+              placeholder="Senha"
+              autocomplete="current-password"
+              required
+            />
+            <button
+              type="button"
+              class="field-toggle"
+              aria-label="Mostrar senha"
+              data-toggle-password
+            >
+              <i class="bx bx-show" aria-hidden="true"></i>
+            </button>
+          </label>
+
+          <a class="forgot-link" href="#">Esqueceu sua senha?</a>
+
+          <button class="login-submit" type="submit">Entrar</button>
+        </form>
+
+        <div class="login-divider"><span>ou entre com</span></div>
+
+        <div class="login-social">
+          <a class="social-button" href="#">
+            <i class="bx bxl-google" aria-hidden="true"></i>
+            Continuar com Google
+          </a>
+          <a class="social-button" href="#">
+            <i class="bx bxl-discord-alt" aria-hidden="true"></i>
+            Continuar com Discord
+          </a>
+        </div>
+
+        <p class="login-signup">
+          Ainda não tem uma conta? <a href="#">Criar sua conta</a>
+        </p>
+      </section>
     </main>
   </body>
 </html>

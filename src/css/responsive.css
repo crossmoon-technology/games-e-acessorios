@@ -9,6 +9,13 @@
   display: none;
 }
 
+/* Entre 1024px e 1279px a grade de produtos tem 4 colunas, com o cartão na vertical */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .products {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
 /* ----- Abaixo de 1024px: tablet e celular ----- */
 @media (max-width: 1023px) {
   :root {

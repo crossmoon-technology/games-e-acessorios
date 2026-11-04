@@ -5,9 +5,7 @@
   justify-content: center;
   min-height: 100vh;
   padding: 24px 16px;
-  background:
-    radial-gradient(circle at 100% 100%, var(--promo-orange), transparent 45%),
-    linear-gradient(160deg, var(--login-blue) 0%, var(--login-blue-deep) 100%);
+  background: var(--page-bg);
 }
 
 .sr-only {
@@ -20,35 +18,71 @@
 }
 
 .login-card {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
   width: 100%;
-  max-width: 480px;
-  padding: 40px 44px 36px;
-  text-align: center;
+  max-width: 1120px;
+  overflow: hidden;
   background: var(--white);
   border-radius: 24px;
-  box-shadow: 0 24px 60px rgba(0, 20, 80, 0.35);
+  box-shadow: 0 24px 60px rgba(10, 18, 53, 0.18);
+}
+
+/* Lado esquerdo: marca */
+.login-brand {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  padding: 56px 48px;
+  color: var(--white);
+  text-align: center;
+  background:
+    radial-gradient(circle at 0% 0%, var(--login-glow), transparent 38%),
+    radial-gradient(circle at 100% 100%, var(--promo-orange), transparent 58%),
+    linear-gradient(160deg, var(--login-panel) 0%, var(--login-blue-deep) 100%);
 }
 
 .login-logo {
   display: inline-block;
+  align-self: center;
 }
 
 .login-logo img {
   display: block;
-  width: 230px;
+  width: 260px;
   height: auto;
 }
 
-.login-card h1 {
+.login-brand h2 {
   margin-top: 8px;
-  font-size: 30px;
+  font-size: 32px;
+  line-height: 1.2;
+}
+
+.login-brand p {
+  margin-top: 12px;
+  font-size: 16px;
+  color: var(--gray-100);
+}
+
+/* Lado direito: formulário */
+.login-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 48px 56px;
+}
+
+.login-panel h1 {
+  font-size: 32px;
   line-height: 1.2;
   color: var(--navy);
 }
 
 .login-subtitle {
-  margin-top: 10px;
-  font-size: 15px;
+  margin-top: 6px;
+  font-size: 16px;
   color: var(--gray-600);
 }
 
@@ -57,7 +91,6 @@
   flex-direction: column;
   gap: 16px;
   margin-top: 28px;
-  text-align: left;
 }
 
 .field {
@@ -113,7 +146,7 @@
   align-self: flex-end;
   margin-top: -4px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--orange);
 }
 
@@ -124,7 +157,7 @@
 
 .login-submit {
   height: 54px;
-  margin-top: 8px;
+  margin-top: 4px;
   font: inherit;
   font-size: 18px;
   font-weight: 700;
@@ -197,6 +230,7 @@
 .login-signup {
   margin-top: 22px;
   font-size: 15px;
+  text-align: center;
   color: var(--gray-600);
 }
 
@@ -205,16 +239,46 @@
   color: var(--orange);
 }
 
-@media (max-width: 464px) {
+/* Tablet e celular: os dois lados empilham */
+@media (max-width: 849px) {
   .login-card {
-    padding: 28px 20px 24px;
+    max-width: 520px;
+    grid-template-columns: 1fr;
   }
 
-  .login-card h1 {
+  .login-brand {
+    padding: 32px 28px;
+  }
+
+  .login-logo img {
+    width: 180px;
+  }
+
+  .login-brand h2 {
+    font-size: 24px;
+  }
+
+  .login-brand p {
+    display: none;
+  }
+
+  .login-panel {
+    padding: 32px 28px;
+  }
+}
+
+@media (max-width: 464px) {
+  .login-brand,
+  .login-panel {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+
+  .login-panel h1 {
     font-size: 26px;
   }
 
-  .login-subtitle br {
+  .login-brand h2 br {
     display: none;
   }
 }

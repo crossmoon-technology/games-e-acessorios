@@ -86,6 +86,9 @@ loadIncludes().then(() => {
   initMenu();
   renderCartBadge();
   renderCartPage();
+  renderProductList();
+  renderProductPage();
+  linkCards();
 });
 
 /* Login: mostrar/ocultar senha. Sem backend ainda, então o envio do formulário é interrompido. */
@@ -164,14 +167,18 @@ const addToCart = (card) => {
   const price = parsePrice(card.querySelector(".product-footer strong").textContent);
   const image = card.querySelector("img")?.getAttribute("src") ?? "";
   const spec = card.querySelector(".product-info p")?.textContent.trim() ?? "";
-  const id = slugify(name);
+
+  addItem({ id: slugify(name), name, price, image, spec });
+};
+
+const addItem = ({ id, name, price, image, spec }, qty = 1) => {
   const items = readCart();
   const found = items.find((item) => item.id === id);
 
   if (found) {
-    found.qty += 1;
+    found.qty += qty;
   } else {
-    items.push({ id, name, price, image, spec, qty: 1 });
+    items.push({ id, name, price, image, spec, qty });
   }
 
   writeCart(items);
@@ -403,3 +410,304 @@ document.addEventListener("submit", (event) => {
 
   renderCartPage();
 });
+
+/* ----- Catálogo: listagem (produtos.html) e detalhe (produto.html) ----- */
+/* PRODUCTS vem de js/products.js, carregado só nas páginas que precisam dele. */
+const catalog = (typeof PRODUCTS === "undefined" ? [] : PRODUCTS).map((product) => ({
+  ...product,
+  id: slugify(product.name),
+}));
+
+const CATEGORY_LABELS = {
+  consoles: "Consoles",
+  jogos: "Jogos",
+  acessorios: "Acessórios",
+  "pc-gamer": "PC Gamer",
+  colecionaveis: "Colecionáveis",
+};
+
+const LISTED_CATEGORIES = ["consoles", "jogos", "acessorios", "pc-gamer", "colecionaveis"];
+
+const SORT_OPTIONS = [
+  ["", "Relevância"],
+  ["preco-asc", "Menor preço"],
+  ["preco-desc", "Maior preço"],
+  ["nome", "Nome (A-Z)"],
+];
+
+const productUrl = (id) => `/src/produto.html?id=${id}`;
+
+const listUrl = (params) => {
+  const query = new URLSearchParams();
+
+  Object.entries(params).forEach(([key, value]) => {
+    if (value) {
+      query.set(key, value);
+    }
+  });
+
+  const text = query.toString();
+  return `/src/produtos.html${text ? `?${text}` : ""}`;
+};
+
+const escapeHtml = (text) =>
+  text.replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]);
+
+const normalize = (text) =>
+  text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "");
+
+const productCard = (product) => `
+  <article class="product">
+    <a class="product-image" href="${productUrl(product.id)}">
+      <img src="${product.image}" alt="${escapeHtml(product.name)}" loading="lazy" />
+    </a>
+    <div class="product-info">
+      <h3><a href="${productUrl(product.id)}">${escapeHtml(product.name)}</a></h3>
+      ${product.spec ? `<p>${escapeHtml(product.spec)}</p>` : ""}
+    </div>
+    <div class="product-footer">
+      <strong>${formatPrice(product.price)}</strong>
+      <button type="button" class="cart-button" aria-label="Adicionar ao carrinho">
+        <i class="bx bx-cart" aria-hidden="true"></i>
+      </button>
+    </div>
+  </article>`;
+
+const renderProductList = () => {
+  const root = document.getElementById("products-root");
+
+  if (!root) {
+    return;
+  }
+
+  const params = new URLSearchParams(location.search);
+  const category = params.get("categoria") || "";
+  const query = (params.get("q") || "").trim();
+  const order = params.get("ordem") || "";
+
+  const list = catalog.filter(
+    (product) =>
+      (!category || product.category === category) &&
+      (!query ||
+        normalize([product.name, product.spec, product.brand, CATEGORY_LABELS[product.category]].join(" ")).includes(
+          normalize(query)
+        ))
+  );
+
+  if (order === "preco-asc") {
+    list.sort((a, b) => a.price - b.price);
+  } else if (order === "preco-desc") {
+    list.sort((a, b) => b.price - a.price);
+  } else if (order === "nome") {
+    list.sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
+  }
+
+  const title = query
+    ? `Resultados para "${escapeHtml(query)}"`
+    : CATEGORY_LABELS[category] || "Todos os produtos";
+
+  document.title = `${query ? "Busca" : CATEGORY_LABELS[category] || "Produtos"} | Games e Acessórios`;
+
+  root.innerHTML = `
+    <h1 class="list-title">${title}</h1>
+
+    <div class="list-toolbar">
+      <nav class="list-chips" aria-label="Categorias">
+        <a class="chip${category ? "" : " is-active"}" href="${listUrl({ q: query, ordem: order })}">Todos</a>
+        ${LISTED_CATEGORIES.map(
+          (key) =>
+            `<a class="chip${category === key ? " is-active" : ""}" href="${listUrl({ categoria: key, q: query, ordem: order })}">${CATEGORY_LABELS[key]}</a>`
+        ).join("")}
+      </nav>
+
+      <label class="list-sort">
+        <span>Ordenar por</span>
+        <select id="sort-select">
+          ${SORT_OPTIONS.map(
+            ([value, label]) => `<option value="${value}"${order === value ? " selected" : ""}>${label}</option>`
+          ).join("")}
+        </select>
+      </label>
+    </div>
+
+    <p class="list-count">${list.length} ${list.length === 1 ? "produto" : "produtos"}</p>
+
+    ${
+      list.length > 0
+        ? `<div class="products">${list.map(productCard).join("")}</div>`
+        : `<div class="cart-empty">
+            <i class="bx bx-search" aria-hidden="true"></i>
+            <p>Nenhum produto encontrado.</p>
+            <a class="cart-back" href="/src/produtos.html">Ver todos os produtos</a>
+          </div>`
+    }`;
+};
+
+const renderProductPage = () => {
+  const root = document.getElementById("product-root");
+
+  if (!root) {
+    return;
+  }
+
+  const product = catalog.find((item) => item.id === new URLSearchParams(location.search).get("id"));
+
+  if (!product) {
+    root.innerHTML = `
+      <div class="cart-empty">
+        <i class="bx bx-error-circle" aria-hidden="true"></i>
+        <p>Produto não encontrado.</p>
+        <a class="cart-back" href="/src/produtos.html">Ver todos os produtos</a>
+      </div>`;
+    return;
+  }
+
+  document.title = `${product.name} | Games e Acessórios`;
+
+  const related = catalog.filter((item) => item.category === product.category && item.id !== product.id).slice(0, 5);
+  const installment = formatPrice(Math.ceil(product.price / 12));
+
+  root.dataset.id = product.id;
+  root.innerHTML = `
+    <nav class="breadcrumb" aria-label="Você está em">
+      <a href="/src/index.html">Início</a>
+      <i class="bx bx-chevron-right" aria-hidden="true"></i>
+      <a href="${listUrl({ categoria: product.category })}">${CATEGORY_LABELS[product.category]}</a>
+      <i class="bx bx-chevron-right" aria-hidden="true"></i>
+      <span>${escapeHtml(product.name)}</span>
+    </nav>
+
+    <div class="product-detail">
+      <div class="detail-image">
+        <img src="${product.image}" alt="${escapeHtml(product.name)}" />
+      </div>
+
+      <div class="detail-info">
+        <h1>${escapeHtml(product.name)}</h1>
+        <p class="detail-meta">${[product.brand, product.spec].filter(Boolean).map(escapeHtml).join(" • ")}</p>
+
+        <p class="detail-price">${formatPrice(product.price)}</p>
+        <p class="detail-installments">ou 12x de ${installment} sem juros</p>
+
+        <div class="detail-buy">
+          <div class="cart-qty">
+            <button type="button" data-detail="dec" aria-label="Diminuir quantidade"><i class="bx bx-minus" aria-hidden="true"></i></button>
+            <span id="detail-qty">1</span>
+            <button type="button" data-detail="inc" aria-label="Aumentar quantidade"><i class="bx bx-plus" aria-hidden="true"></i></button>
+          </div>
+          <button type="button" class="detail-add" data-detail="add">
+            <i class="bx bx-cart" aria-hidden="true"></i> Adicionar ao carrinho
+          </button>
+        </div>
+        <button type="button" class="detail-buy-now" data-detail="buy">Comprar agora</button>
+
+        <ul class="detail-perks">
+          <li><i class="bx bxs-truck" aria-hidden="true"></i> Frete para todo o Brasil</li>
+          <li><i class="bx bx-credit-card" aria-hidden="true"></i> Parcele em até 12x no cartão</li>
+          <li><i class="bx bx-shield-quarter" aria-hidden="true"></i> Compra segura e dados protegidos</li>
+        </ul>
+
+        <h2>Descrição</h2>
+        <p class="detail-description">${escapeHtml(product.description)}</p>
+      </div>
+    </div>
+
+    ${
+      related.length > 0
+        ? `<section class="shelf" aria-label="Produtos relacionados">
+            <header class="section-head">
+              <h2 class="section-title">Produtos relacionados</h2>
+            </header>
+            <div class="products">${related.map(productCard).join("")}</div>
+          </section>`
+        : ""
+    }`;
+};
+
+/* Compra na página do produto */
+document.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-detail]");
+  const root = document.getElementById("product-root");
+
+  if (!button || !root?.dataset.id) {
+    return;
+  }
+
+  const qtyBox = document.getElementById("detail-qty");
+  const action = button.dataset.detail;
+  let qty = Number(qtyBox.textContent);
+
+  if (action === "inc") {
+    qtyBox.textContent = qty + 1;
+    return;
+  }
+
+  if (action === "dec") {
+    qtyBox.textContent = Math.max(1, qty - 1);
+    return;
+  }
+
+  addItem(catalog.find((item) => item.id === root.dataset.id), qty);
+
+  if (action === "buy") {
+    location.href = "/src/carrinho.html";
+    return;
+  }
+
+  const original = button.innerHTML;
+  button.innerHTML = '<i class="bx bx-check" aria-hidden="true"></i> Adicionado!';
+  setTimeout(() => (button.innerHTML = original), 1200);
+});
+
+/* Ordenação da listagem */
+document.addEventListener("change", (event) => {
+  if (event.target.id !== "sort-select") {
+    return;
+  }
+
+  const params = new URLSearchParams(location.search);
+
+  if (event.target.value) {
+    params.set("ordem", event.target.value);
+  } else {
+    params.delete("ordem");
+  }
+
+  location.search = params.toString();
+});
+
+/* Busca do header (desktop e menu mobile) leva para a listagem */
+document.addEventListener("submit", (event) => {
+  const form = event.target.closest(".search, .mobile-search");
+
+  if (!form) {
+    return;
+  }
+
+  event.preventDefault();
+  location.href = listUrl({ q: form.querySelector("input").value.trim() });
+});
+
+/* Na home, nome e imagem dos cartões passam a abrir o produto. */
+const linkCards = () => {
+  document.querySelectorAll(".product, .game").forEach((card) => {
+    const title = card.querySelector("h3");
+
+    if (!title || title.querySelector("a")) {
+      return;
+    }
+
+    const url = productUrl(slugify(title.textContent.trim()));
+    title.innerHTML = `<a href="${url}">${title.innerHTML}</a>`;
+
+    const media = card.querySelector(".product-image, .game-cover");
+
+    if (media && media.tagName !== "A") {
+      media.style.cursor = "pointer";
+      media.addEventListener("click", () => (location.href = url));
+    }
+  });
+};
